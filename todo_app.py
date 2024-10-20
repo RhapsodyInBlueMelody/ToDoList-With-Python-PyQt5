@@ -1,7 +1,10 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QLineEdit, QPushButton, QHBoxLayout
+import json
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QLineEdit, QPushButton
+
 
 class ToDoApp(QWidget):
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("ToDoloo")
@@ -26,6 +29,7 @@ class ToDoApp(QWidget):
 
         self.add_button.clicked.connect(self.add_task)
         self.remove_button.clicked.connect(self.remove_task)
+        self.load_tasks()
 
         self.input_field.setStyleSheet("background-color: #3A6D8C; border-radius: 10px; border: 1px solid #ccc; padding: 10px; margin: 20px; color: white;")
         self.add_button.setStyleSheet("background-color: #EAD8B1; border-radius: 10px; border: 1px solid #ccc; padding: 10px;")
@@ -40,13 +44,28 @@ class ToDoApp(QWidget):
             self.tasks.append(task)
             self.task_list.addItem(task)
             self.input_field.clear()
-            
+            self.save_tasks()
+
     def remove_task(self):
         selected_task = self.task_list.currentRow()
         if selected_task >= 0:
-            self.tasks.pop(selected_task)
             self.task_list.takeItem(selected_task)
-        
+            del self.tasks[selected_task]
+            self.save_tasks()
+
+    def save_tasks(self):
+        with open("tasks.json", "w") as file:
+            json.dump(self.tasks, file)
+
+    def load_tasks(self):
+        try:
+            with open("tasks.json", "r") as file:
+                self.tasks = json.load(file)
+            for task in self.tasks:
+                self.task_list.addItem(task)
+        except FileNotFoundError:
+            pass
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
