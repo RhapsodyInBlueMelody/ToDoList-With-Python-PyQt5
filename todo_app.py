@@ -1,6 +1,7 @@
 import sys
 import json
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QLineEdit, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QLineEdit, QPushButton, QLabel
+from PyQt5.QtCore import Qt
 
 
 class ToDoApp(QWidget):
@@ -15,6 +16,8 @@ class ToDoApp(QWidget):
         self.layout = QVBoxLayout()
         self.button_layout = QHBoxLayout()
 
+        label = QLabel("ToDoLoo")
+        desc = QLabel("Simple To-Do apps with Python ^_^")
         self.input_field = QLineEdit()
         self.add_button = QPushButton("Add Task")
         self.remove_button = QPushButton("Remove Task")
@@ -23,6 +26,8 @@ class ToDoApp(QWidget):
         self.button_layout.addWidget(self.add_button)
         self.button_layout.addWidget(self.remove_button)
 
+        self.layout.addWidget(label)
+        self.layout.addWidget(desc)
         self.layout.addWidget(self.input_field)
         self.layout.addLayout(self.button_layout)
         self.layout.addWidget(self.task_list)
@@ -31,6 +36,10 @@ class ToDoApp(QWidget):
         self.remove_button.clicked.connect(self.remove_task)
         self.load_tasks()
 
+        label.setStyleSheet("color: white")
+        label.setAlignment(Qt.AlignCenter)
+        desc.setStyleSheet("color: white")
+        desc.setAlignment(Qt.AlignCenter)
         self.input_field.setStyleSheet("background-color: #3A6D8C; border-radius: 10px; border: 1px solid #ccc; padding: 10px; margin: 20px; color: white;")
         self.add_button.setStyleSheet("background-color: #EAD8B1; border-radius: 10px; border: 1px solid #ccc; padding: 10px;")
         self.remove_button.setStyleSheet("background-color: #EAD8B1;border-radius: 10px; border: 1px solid #ccc; padding: 10px;")
